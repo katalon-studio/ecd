@@ -14,8 +14,6 @@ import java.io.FilenameFilter;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.jetbrains.java.decompiler.main.decompiler.ConsoleDecompiler;
@@ -27,6 +25,7 @@ import org.sf.feeling.decompiler.JavaDecompilerPlugin;
 import org.sf.feeling.decompiler.editor.BaseDecompiler;
 import org.sf.feeling.decompiler.editor.IDecompiler;
 import org.sf.feeling.decompiler.util.ClassUtil;
+import org.sf.feeling.decompiler.util.CommentUtil;
 import org.sf.feeling.decompiler.util.FileUtil;
 import org.sf.feeling.decompiler.util.JarClassExtractor;
 import org.sf.feeling.decompiler.util.UnicodeUtil;
@@ -127,22 +126,7 @@ public class FernFlowerDecompiler extends BaseDecompiler {
 
 		FileUtil.deltree(tmpDir);
 
-		Pattern wp = Pattern.compile("/\\*.+?\\*/", Pattern.DOTALL); //$NON-NLS-1$
-		Matcher m = wp.matcher(source);
-		while (m.find()) {
-			if (m.group().matches("/\\*\\s*\\d*\\s*\\*/")) //$NON-NLS-1$
-				continue;
-			String group = m.group();
-			group = group.replace("/*", ""); //$NON-NLS-1$ //$NON-NLS-2$
-			group = group.replace("*/", ""); //$NON-NLS-1$ //$NON-NLS-2$
-			group = group.replace("*", ""); //$NON-NLS-1$ //$NON-NLS-2$
-			if (log.length() > 0) {
-				log += "\n"; //$NON-NLS-1$
-			}
-			log += group;
-
-			source = source.replace(m.group(), ""); //$NON-NLS-1$
-		}
+		source = CommentUtil.clearComments(source);
 
 		time = stopWatch.getTime();
 	}
