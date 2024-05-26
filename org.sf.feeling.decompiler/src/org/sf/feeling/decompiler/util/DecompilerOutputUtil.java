@@ -374,7 +374,7 @@ public class DecompilerOutputUtil {
 	}
 
 	public static int parseJavaLineNumber(String decompilerType, String line) {
-		String regex = "/\\*\\s*\\d+\\s*\\*/"; //$NON-NLS-1$
+		String regex = CommentUtil.LINE_NUMBER_COMMENT;
 		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(line.trim());
 		if (matcher.find()) {
@@ -384,7 +384,7 @@ public class DecompilerOutputUtil {
 	}
 
 	public static int parseJavaLineNumber(String line) {
-		String regex = "/\\*\\s*\\d+\\s*\\*/"; //$NON-NLS-1$
+		String regex = CommentUtil.LINE_NUMBER_COMMENT;
 		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(line.trim());
 		if (matcher.find()) {
@@ -401,7 +401,7 @@ public class DecompilerOutputUtil {
 	}
 
 	private String removeJavaLineNumber(String line, boolean generageEmptyString, int leftTrimSpace) {
-		String regex = "/\\*\\s*\\d+\\s*\\*/"; //$NON-NLS-1$
+		String regex = CommentUtil.LINE_NUMBER_COMMENT;
 //		if (DecompilerType.FernFlower.equals(decompilerType)) {
 //			regex = "//\\s+\\d+(\\s*\\d*)*"; //$NON-NLS-1$
 //		}

@@ -10,8 +10,6 @@ package org.sf.feeling.decompiler.cfr.decompiler;
 
 import java.io.File;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.benf.cfr.reader.apiunreleased.ClassFileSource2;
@@ -34,6 +32,7 @@ import org.sf.feeling.decompiler.JavaDecompilerPlugin;
 import org.sf.feeling.decompiler.cfr.CfrDecompilerPlugin;
 import org.sf.feeling.decompiler.editor.BaseDecompiler;
 import org.sf.feeling.decompiler.editor.IDecompiler;
+import org.sf.feeling.decompiler.util.CommentUtil;
 import org.sf.feeling.decompiler.util.FileUtil;
 import org.sf.feeling.decompiler.util.JarClassExtractor;
 import org.sf.feeling.decompiler.util.UnicodeUtil;
@@ -103,24 +102,7 @@ public class CfrDecompiler extends BaseDecompiler {
 			classFile.dump(dumper);
 			source = UnicodeUtil.decode(stringBuilder.toString().trim());
 
-			Pattern wp = Pattern.compile("/\\*.+?\\*/", Pattern.DOTALL); //$NON-NLS-1$
-			Matcher m = wp.matcher(source);
-			while (m.find()) {
-				if (m.group().matches("/\\*\\s+\\d*\\s+\\*/")) {//$NON-NLS-1$
-					continue;
-				}
-				String group = m.group();
-				group = group.replace("/*", ""); //$NON-NLS-1$ //$NON-NLS-2$
-				group = group.replace("*/", ""); //$NON-NLS-1$ //$NON-NLS-2$
-				group = group.replace("*", ""); //$NON-NLS-1$ //$NON-NLS-2$
-				if (log.length() > 0) {
-					log += "\n"; //$NON-NLS-1$
-				}
-				log += group;
-
-				source = source.replace(m.group(), "").trim(); //$NON-NLS-1$
-			}
-
+			source = CommentUtil.clearComments(source);
 		} catch (Exception e) {
 			exceptions.add(e);
 			JavaDecompilerPlugin.logError(e, e.getMessage());
