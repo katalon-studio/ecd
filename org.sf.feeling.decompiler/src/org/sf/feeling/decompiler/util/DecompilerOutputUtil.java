@@ -771,6 +771,14 @@ public class DecompilerOutputUtil {
 			return level;
 		}
 
+		// replacement for newer Eclipse versions
+		// return JavaCore.latestSupportedJavaVersion();
+		Object obj = ReflectionUtils.invokeMethod(JavaCore.class, "latestSupportedJavaVersion");
+		if (obj != null) {
+			level = (String) obj;
+			return level;
+		}
+
 		// filter oot all versions that are not a simple integers e.g. "9" "10" ...
 		Pattern p = Pattern.compile("^\\d+$");
 		List<String> allVersions = new LinkedList<>(JavaCore.getAllVersions());
@@ -800,6 +808,15 @@ public class DecompilerOutputUtil {
 		if (jslLevel != -1) {
 			return jslLevel;
 		}
+
+		// replacement for newer Eclipse versions
+		// return AST.getJLSLatest();
+		Object obj = ReflectionUtils.invokeMethod(AST.class, "getJLSLatest");
+		if (obj != null) {
+			jslLevel = (Integer) obj;
+			return jslLevel;
+		}
+
 		Pattern p = Pattern.compile("^JLS\\d+$");
 		int maxFieldValue = 8; // Java 8 is supported by all Eclipse versions ECD targets
 		for (Field f : AST.class.getFields()) {
@@ -816,6 +833,8 @@ public class DecompilerOutputUtil {
 			}
 		}
 		jslLevel = maxFieldValue;
+		AST.getJLSLatest();
+
 		return jslLevel;
 	}
 }
