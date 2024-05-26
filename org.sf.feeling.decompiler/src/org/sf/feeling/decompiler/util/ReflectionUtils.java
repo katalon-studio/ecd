@@ -35,12 +35,19 @@ public class ReflectionUtils {
 			return null;
 		}
 
-		for (Class clazz = object.getClass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
+		Class clazz;
+		if ((object instanceof Class)) {
+			clazz = (Class) object;
+		} else {
+			clazz = object.getClass();
+		}
+		do {
 			try {
 				return clazz.getDeclaredMethod(methodName, parameterTypes);
 			} catch (Exception e) {
 			}
-		}
+			clazz = clazz.getSuperclass();
+		} while (clazz != Object.class);
 
 		return null;
 	}
