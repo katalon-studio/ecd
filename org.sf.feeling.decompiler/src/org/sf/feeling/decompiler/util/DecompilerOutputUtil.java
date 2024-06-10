@@ -402,9 +402,9 @@ public class DecompilerOutputUtil {
 
 	private String removeJavaLineNumber(String line, boolean generageEmptyString, int leftTrimSpace) {
 		String regex = CommentUtil.LINE_NUMBER_COMMENT;
-//		if (DecompilerType.FernFlower.equals(decompilerType)) {
-//			regex = "//\\s+\\d+(\\s*\\d*)*"; //$NON-NLS-1$
-//		}
+		// if (DecompilerType.FernFlower.equals(decompilerType)) {
+		// regex = "//\\s+\\d+(\\s*\\d*)*"; //$NON-NLS-1$
+		// }
 		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(line.trim());
 
@@ -833,8 +833,6 @@ public class DecompilerOutputUtil {
 			}
 		}
 		jslLevel = maxFieldValue;
-		AST.getJLSLatest();
-
 		return jslLevel;
 	}
 }
